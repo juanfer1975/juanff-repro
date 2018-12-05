@@ -3,6 +3,17 @@ JUANFF REPRODUCTOR DE MUSICA
 Basado en Music Library & Player (c) 2018 James Moats - jhmoats@willowlakestudio.com - www.thejamesmachine.com
 *****************************
 
+Caracteristicas
+
+Responsive Design
+HTML5, Flash, archivos lista m3u.
+Ideal para reproducir la música en el sitio web o como reproductor local. Para eso necesitas tener instalado un servidor web local.
+Configuracion por medio de un SETUP.
+Usa PHP, JWPlayer, jQuery, Bootstrap y google seach engine
+No Es necesario tener base de datos. Los directorios son organizados como artista/album/canciones
+Al usar el icono search puede traer los resultados mas relevantes de la canción desde el google seach engine. Para eso es necesario poseer api y el Search_engine_ID
+Licencia Open Source MIT
+
 *****************************
 * Intrucciones *
 *****************************
