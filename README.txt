@@ -59,10 +59,11 @@ Licencia Open Source MIT
 * Historia *
 *******************
 
-1.0.0 - 12/04/2018
+1.0.0 - 12/05/2018
       - Se agrega el buscador del google asociada a cada cancion
       - Se revisa el setup para agregar las caracrteristica del google search 
-      - Se agrega el cargados pace	
+      - Se agrega el cargador pace	
+
 
 
 ***********************
