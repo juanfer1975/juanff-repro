@@ -1,6 +1,6 @@
-JUANFF REPRODUCTOR DE MUSICA
+# JUANFF REPRODUCTOR DE MUSICA
 *****************************
-Basado en Music Library & Player (c) 2018 James Moats - jhmoats@willowlakestudio.com - www.thejamesmachine.com
+# Basado en Music Library & Player (c) 2018 James Moats - jhmoats@willowlakestudio.com - www.thejamesmachine.com
 *****************************
 
 Caracteristicas
