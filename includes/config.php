@@ -94,6 +94,6 @@ elseif ( $jwversion == 7 )
 }
 // buscador de google
 // estos parametros los debe extraer del google api console
-$apigoogle="AIzaSyBKRHHdsULhcbHSZ8sy1g4coKmXfxBw8Jk"; // https://developers.google.com/
-$Search_engine_ID="008976088354159204485:odgcyxt6t9y"; // https://cse.google.com/
+$apigoogle=""; // https://developers.google.com/
+$Search_engine_ID=""; // https://cse.google.com/
 ?>
