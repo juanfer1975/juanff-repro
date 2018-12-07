@@ -16,7 +16,7 @@
 <body>
 <div id="container" class="container-fluid">
 	<div class="row playerrow setup-title-bar">
-		<h1>Iniciales</h1>
+		<h1>Panel de configuración</h1>
 	</div>
 	<?php
 	$alert = null;
@@ -200,28 +200,28 @@
 		if ( is_null($root) )
 		{
 			$mode = null;
-			$alert .= "&bull; Music Root Directory is required.<br>";
+			$alert .= "&bull; El directorio de música es requerido.<br>";
 		}
 		else if ( !file_exists($root) )
 		{
 			$mode = null;
-			$alert .= "&bull; Music Root Directory doesn't exist.<br>";
+			$alert .= "&bull; El directorio de música no existe.<br>";
 		}
 		if ( is_null($types) )
 		{
 			$mode = null;
-			$alert .= "&bull; You must select at least one Supported Audio File Type.<br>";
+			$alert .= "&bull; Selecciona al menos un tipo de archivo de reproducción.<br>";
 		}
 		if ( $jwversion == '7' && empty($jwplayer_key) )
 		{
 			$mode = null;
-			$alert .= "&bull; JW Player License Key is required for JWPlayer Version 7.<br>";
+			$alert .= "&bull; Para el JWPlayer Version 7 es necesario tener clave autorizada.<br>";
 		}
 	}
 	if ( $mode == 'success' )
 	{
 		$config_text = "<?php\r\n";
-		$config_text .= "/* Music Library & Player */\r\n/* Automatically generated config - ".date("Y-m-d H:i:s")." */\r\n";
+		$config_text .= "/* Music Library & Player */\r\n/*  configuador automatico - ".date("Y-m-d H:i:s")." */\r\n";
 		$config_text .= '$debugging = '.$debugging.';'."\r\n";
 		$config_text .= '$root = "'.$root.'";'."\r\n";
 		$config_text .= '$url = "'.$url.'";'."\r\n";
@@ -262,6 +262,15 @@
 			}
 			$config_text .= '$jwplayer_key = "'.$jwplayer_key.'";'."\r\n";
 		}
+		// api de google 
+		$apigoogle = (isset($_POST['apigoogle'])?$_POST['apigoogle']:'');
+		$config_text .= '$apigoogle = "'.$apigoogle.'";'."\r\n";
+		
+		// api google search id
+		$Search_engine_ID = (isset($_POST['Search_engine_ID'])?$_POST['Search_engine_ID']:'');
+		$config_text .= '$Search_engine_ID = "'.$Search_engine_ID.'";'."\r\n";
+
+
 		$config_text .= '?>';
 		
 		if ( file_exists('includes/config.php') )
@@ -271,7 +280,7 @@
 			<div class="row">
 				<div class="col-md-offset-2 col-md-8">
 					<div class="alert alert-warning">
-						Existing config.php file has been renamed.
+						config.php existente ha sido renombrabrado.
 					</div>
 				</div>
 			</div>
@@ -281,7 +290,7 @@
 		
 		if ( !is_writable('includes/config.php') )
 		{
-			$alert = "Setup can't write the config file. Permission denied.";
+			$alert = "No se puede escribir sobre config.php. Permiso denegado";
 			unset($mode);
 		}
 		else
@@ -291,7 +300,7 @@
 			<div class="row">
 				<div class="col-md-offset-2 col-md-8">
 					<div class="alert alert-success">
-						Configuration is complete. Reloading the site...
+						Configuración completa. Recargando el sitio...
 					</div>
 				</div>
 			</div>
@@ -310,7 +319,7 @@
 			<br>
 			<div class="row">
 				<div class="col-md-offset-2 col-md-8">
-					<div class="alert alert-danger"><?=$alert;?></div>
+					<div class="alert alert-danger"><?php echo $alert;?></div>
 				</div>
 			</div>
 			<?php
@@ -320,20 +329,20 @@
 			<div class="col-md-8 col-md-offset-2">
 				<div class="well">
 					<?php
-					if ( file_exists('config.php') )
+					if ( file_exists('includes/config.php') )
 					{
 						?>
-						<p>The form below will help reconfigure your <b>Music Libary & Player</b> installation. Your existing <b>config.php</b> file will be renamed to <b>config.backup.[timestamp].php</b> when you submit this form.</p>
+						<p>El siguiente formulario reconfigura el <b>Reproductor de música</b>. El actual <b>config.php</b> será renombrado a <b>config.backup.[tiempo].php</b>.</p>
 						<?php
 					}
 					else
 					{
 						?>
-						<p>The form below will help set up your new <b>Music Library & Player</b> installation. You are most likely seeing this because a <b>config.php</b> file doesn't exist in this directory (<b><?=$_SERVER['SERVER_NAME'].str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME']));?>/</b>).</p>
+						<p>El siguiente formulario de ayudará a configura el  <b>Reproductor de música</b>. Esto ocurre porque el archivo <b>config.php</b> no existe (<b><?php echo $_SERVER['SERVER_NAME'].str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME']));?>/includes/</b>).</p>
 						<?php
 					}
 					?>
-					<p>If you prefer to manually complete the setup, simply copy the included <b>config.default.php</b> file, save it as <b>config.php</b>, and then edit it with your preferred text editor. The file is well commented for your reference.</p>
+					<p>Si deseas hacerlo de manera manual, copie el archivo <b>config.base.php</b>, y lo guardas como <b>config.php</b>,editando tus preferencias. El archivo se encuentra comentado.</p>
 				</div>
 			</div>
 		</div>
@@ -343,138 +352,137 @@
 				<div class="col-md-8 col-md-offset-2">
 					<div class="well">
 						<div class="form-group">
-							<label>Allow Debugging</label>
+							<label>Ver el depurador</label>
 							<div class="radio">
 								<label>
-									<input name="debugging" type="radio" value="true" <?=$debugging_true;?>> Yes
+									<input name="debugging" type="radio" value="true" <?php echo $debugging_true;?>> SI
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input name="debugging" type="radio" value="false" <?=$debugging_false;?>> No
+									<input name="debugging" type="radio" value="false" <?php echo $debugging_false;?>> No
 								</label>
 							</div>
-							<p class="help-block">Enable this to allow "&debug=log" or "?debug=log" in the URL query string</p>
-							<p class="help-block">This creates a verbose log file and slows down performance.</p>
-							<p class="help-block">Leave disabled unless actively troubleshooting a problem.</p>
+							<p class="help-block">Puedes habilitarlo via navegador agregando "&debug=log" o "?debug=log" en la ruta del reproductor.</p>
+							<p class="help-block">Crear un archivo log.</p>
+							<p class="help-block">Permite detectar algun problema acerca del app.</p>
 							<hr>
-							<label for="root">Music Root Directory</label>
-							<input id="root" name="root" type="text" class="form-control" value="<?=$root;?>" placeholder="Required" required>
-							<p class="help-block">This is the path to your music files, relative to this directory.</p>
-							<p class="help-block">If your music directory is below web root, this may look something like <b>../../../backup/music</b></p>
-							<p class="help-block">Otherwise, it may look something like <b>assets/music</b></p>
+							<label for="root">Ruta de ubicación de la música</label>
+							<input id="root" name="root" type="text" class="form-control" value="<?php echo $root;?>" placeholder="Required" required>
+							<p class="help-block">Esta es la ruta fisica o relativa de la música para el reproductor.</p>
+							<p class="help-block">Ejemplo: <b>../../../musica</b></p>
+							<p class="help-block">c:\\musica\ o <b>datos/musica/</b></p>
 							<hr>
-							<label for="url">This Site URL</label>
-							<input id="url" name="site_url" type="text" class="form-control" value="<?=$url;?>" placeholder="Optional - Only required for m3u playlists">
-							<p class="help-block">The URL of this installation of Music Library & Player including the port number, if necessary.</p>
-							<p class="help-block">Example: <b>//thejamesmachine.com</b></p>
-							<p class="help-block">Example: <b>//mynas.dyndns.org:8080/music</b></p>
+							<label for="url">Ruta del sitio del app</label>
+							<input id="url" name="site_url" type="text" class="form-control" value="<?php echo $url;?>" placeholder="Optional - Only required for m3u playlists">
+							<p class="help-block">Si es necesario incluye el puerto.</p>
+							<p class="help-block">Ejemplo: <b>//juanff.com/juanff-repro/</b></p>
+							<p class="help-block">Ejemplo: <b>//juanff:8080/music</b></p>
 							<hr>
-							<label>Group Root Directory by Letter</label>
+							<label>Agrupar el directorio por letra</label>
 							<div class="radio">
 								<label>
-									<input name="group" type="radio" value="true" <?=$group_true;?>> Yes
+									<input name="group" type="radio" value="true" <?php echo $group_true;?>> Si
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input name="group" type="radio" value="false" <?=$group_false;?>> No
+									<input name="group" type="radio" value="false" <?php echo $group_false;?>> No
 								</label>
 							</div>
-							<p class="help-block">Substantial music collections can scroll for days.</p>
-							<p class="help-block">Enabling this option creates collapsed groups by first letter (#, A, B, C, etc.)</p>
+							<p class="help-block">Habilita esta opción si quieres agrupar tu música por letras (#, A, B, C, etc.)</p>
 							<hr>
-							<label>Show Download Links</label>
+							<label>Habilitar el enlace para descargar</label>
 							<div class="radio">
 								<label>
-									<input name="download" type="radio" value="true" <?=$download_true;?>> Yes
+									<input name="download" type="radio" value="true" <?php echo $download_true;?>> Si
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input name="download" type="radio" value="false" <?=$download_false;?>> No
+									<input name="download" type="radio" value="false" <?php echo $download_false;?>> No
 								</label>
 							</div>
-							<p class="help-block">Enabling this option includes a download icon/link next to each music file in the list.</p>
+							<p class="help-block">Permite habilitar el ícono de descargar la canción.</p>
 							<hr>
-							<label>Show M3U Playlist Links</label>
+							<label>Habilitar enlace para listas tipo M3U</label>
 							<div class="radio">
 								<label>
-									<input name="m3u" type="radio" value="true" <?=$m3u_true;?>> Yes
+									<input name="m3u" type="radio" value="true" <?php echo $m3u_true;?>> Si
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input name="m3u" type="radio" value="false" <?=$m3u_false;?>> No
+									<input name="m3u" type="radio" value="false" <?php echo $m3u_false;?>> No
 								</label>
 							</div>
-							<p class="help-block">Enabling this option includes an m3u playlist icon/link on the page when music files are in the list.</p>
-							<p class="help-block"><b>Note:</b> If you have password protected your music directory, m3u playlists will not work in most external players.</p>
+							<p class="help-block">Permite incluiir una lista de reproducción tipo m3u en el app.</p>
+							<p class="help-block"><b>Note:</b> Esto funciona si no tienes protección en tu carpeta de música.</p>
 							<hr>
-							<label>Supported Audio File Types</label>
+							<label>Tipos de audios soportados</label>
 							<div class="checkbox">
 								<label>
-									<input type="checkbox" name="types[]" value="aac" <?=$aac_selected;?>> aac
-								</label>
-							</div>
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" name="types[]" value="m4a" <?=$m4a_selected;?>> m4a
+									<input type="checkbox" name="types[]" value="aac" <?php echo $aac_selected;?>> aac
 								</label>
 							</div>
 							<div class="checkbox">
 								<label>
-									<input type="checkbox" name="types[]" value="f4a" <?=$f4a_selected;?>> f4a
+									<input type="checkbox" name="types[]" value="m4a" <?php echo $m4a_selected;?>> m4a
 								</label>
 							</div>
 							<div class="checkbox">
 								<label>
-									<input type="checkbox" name="types[]" value="mp3" <?=$mp3_selected;?>> mp3
+									<input type="checkbox" name="types[]" value="f4a" <?php echo $f4a_selected;?>> f4a
 								</label>
 							</div>
 							<div class="checkbox">
 								<label>
-									<input type="checkbox" name="types[]" value="ogg" <?=$ogg_selected;?>> ogg
+									<input type="checkbox" name="types[]" value="mp3" <?php echo $mp3_selected;?>> mp3
 								</label>
 							</div>
 							<div class="checkbox">
 								<label>
-									<input type="checkbox" name="types[]" value="oga" <?=$oga_selected;?>> oga
+									<input type="checkbox" name="types[]" value="ogg" <?php echo $ogg_selected;?>> ogg
 								</label>
 							</div>
-							<p class="help-block">Select the file types you want displayed in the list.</p>
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" name="types[]" value="oga" <?php echo $oga_selected;?>> oga
+								</label>
+							</div>
+							<p class="help-block">Selecciona los tipos de archivos a reproducir.</p>
 							<hr>
 							<label>File Delivery Method</label>
 							<div class="radio">
 								<label>
-									<input type="radio" name="delivery" value="download" <?=$delivery_download;?>> Download
+									<input type="radio" name="delivery" value="download" <?php echo $delivery_download;?>> Download
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" name="delivery" value="stream" <?=$delivery_stream;?>> Stream
+									<input type="radio" name="delivery" value="stream" <?php echo $delivery_stream;?>> Stream
 								</label>
 							</div>
-							<p class="help-block">Download is simple and JWPlayer shows progress bar and scrub/shuttle knob.</p>
-							<p class="help-block">Stream is more compatible with Android and iOS, but JWPlayer shows "Live Stream" and no progress bar.</p>
+							<p class="help-block">Download permite mostrar la barra de progeso.</p>
+							<p class="help-block">Stream muestra "Live Stream" y es más compatible con android / IOS.</p>
 							<hr>
-							<label>Player Repeat</label>
+							<label>Repetir reproductor</label>
 							<div class="radio">
 								<label>
-									<input type="radio" name="repeat" value="true" <?=$repeat_true;?>> Yes
+									<input type="radio" name="repeat" value="true" <?php echo $repeat_true;?>> Si
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" name="repeat" value="false" <?=$repeat_false;?>> No
+									<input type="radio" name="repeat" value="false" <?php echo $repeat_false;?>> No
 								</label>
 							</div>
-							<p class="help-block">Enabling this option repeats the playlist automatically when it finishes.</p>
+							<p class="help-block">Permite repetir automáticamente la lista de música al finalizar.</p>
 							<hr>
-							<label for="rand_count">Random Playlist Track Count</label>
-							<input id="rand_count" name="rand_count" type="text" class="form-control" value="<?=$rand_count;?>">
-							<p class="help-block">Number of tracks to include in random playlist.</p>
-							<p class="help-block">If there are fewer tracks available in the selected directory, this amount will be adjusted automatically.</p>
+							<label for="rand_count">Número de cancion aleatorias.</label>
+							<input id="rand_count" name="rand_count" type="text" class="form-control" value="<?php echo $rand_count;?>">
+							<p class="help-block">Cantidad de canciones a reproduccir de manera aleatoria.</p>
+							<p class="help-block">Si la cantidad es muy poca, el app se ajustará de manera automáticamente.</p>
 						</div>
 					</div>
 				</div>
@@ -483,55 +491,66 @@
 				<div class="col-md-8 col-md-offset-2">
 					<div class="well">
 						<div class="form-group">
-							<h3>JWPlayer Settings</h3>
+							<h3>Configuraciones del JWPlayer</h3>
 							<hr>
-							<label>JWPlayer Version</label>
+							<label>Version JWPlayer </label>
 							<div class="radio">
 								<label>
-									<input type="radio" name="jwversion" value="6" <?=$version_6;?>> Version 6
+									<input type="radio" name="jwversion" value="6" <?php echo $version_6;?>> Version 6
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" name="jwversion" value="7" <?=$version_7;?>> Version 7
+									<input type="radio" name="jwversion" value="7" <?php echo $version_7;?>> Version 7
 								</label>
 							</div>
-							<p class="help-block">JWPlayer Version 6 does not require a registered key and is better for this application.</p>
-							<p class="help-block">JWPlayer Version 7 requires a key and doesn't have a Previous button on the player. This player version is required for certain iOS/Safari versions to work properly.</p>
-							<p class="help-block"><b>Note:</b> Newer cloud hosted JWPlayer versions aren't supported.</p>
+							<p class="help-block">JWPlayer Version 6 no requiere clave de autorización.</p>
+							<p class="help-block">JWPlayer Version 7 necesita clave de autorización. Es requirido cuando se usa safari o IOS.</p>
+							<p class="help-block"><b>Nota:</b> Ninguna versión en la nube del JWPlayer es soportador.</p>
 							<hr>
-							<label>Primary Player</label>
+							<label>Reproductor Principal</label>
 							<div class="radio">
 								<label>
-									<input type="radio" name="primary-player" value="html5" <?=$primary_player_html;?>> HTML5
+									<input type="radio" name="primary-player" value="html5" <?php echo $primary_player_html;?>> HTML5
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" name="primary-player" value="flash" <?=$primary_player_flash;?>> Flash
+									<input type="radio" name="primary-player" value="flash" <?php echo $primary_player_flash;?>> Flash
 								</label>
 							</div>
-							<p class="help-block">If primary isn't available, JWPlayer automatically switches back to the secondary.</p>
-							<p class="help-block">This setting is ignored if using JWPlayer 7.</p>
+							<p class="help-block">Si no esta disponible el primario, el app cargará la segunda opción.</p>
+							<p class="help-block">JWPlayer 7 ignora esta configuración.</p>
 							<hr>
-							<label>MLP Skin</label>
+							<label>Gráfica MLP Skin</label>
 							<div class="radio">
 								<label>
-									<input type="radio" name="skin" value="true" <?=$mlpskin_true;?>> Yes
+									<input type="radio" name="skin" value="true" <?php echo $mlpskin_true;?>> Si
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" name="skin" value="false" <?=$mlpskin_false;?>> No
+									<input type="radio" name="skin" value="false" <?php echo $mlpskin_false;?>> No
 								</label>
 							</div>
-							<p class="help-block">MLP skin is a custom skin created for Music Library & Player that just doubles the size of controls, to make it easier to navigate on small screen devices.</p>
+							<p class="help-block">MLP skin permite crear una interfaz más grande cuando se usan dispositivos móviles.</p>
 							<hr>
-							<label for="jwplayer_key">JWPlayer License Key</label>
-							<input type="text" id="jwplayer_key" name="jwplayer_key" class="form-control" value="<?=$jwplayer_key;?>">
-							<p class="help-block">If you have a JWPlayer key, enter it here. This isn't required for JWPlayer Version 6.</p>
+							<label for="jwplayer_key">Clave JWPlayer</label>
+							<input type="text" id="jwplayer_key" name="jwplayer_key" class="form-control" value="<?php echo $jwplayer_key;?>">
+							<p class="help-block">Si la posees, digitala. En la versión 6 no es necesaria.</p>
+							
 							<hr>
-							<input type="submit" name="submit" value="Save Config" class="btn btn-default">
+							<label for="apigoogle">Google API</label>
+							<input type="text" id="apigoogle" name="apigoogle" class="form-control" value="<?php echo $apigoogle;?>">
+							<p class="help-block">Si la posees, digitala. Es necesaria para acceder al buscador personalizado de google. <a href="https://developers.google.com/" target="_blank">https://developers.google.com/</a>.<br><strong>Recuerda que debes una poseer una cuenta de gmail para acceder a estas opciones.</strong></p>
+							<hr>
+							<label for="Search_engine_ID">Google Search_engine_ID</label>
+							<input type="text" id="Search_engine_ID" name="Search_engine_ID" class="form-control" value="<?php echo $Search_engine_ID;?>">
+							<p class="help-block">Si la posees, digitala. Es necesaria para ejecuta el buscador personalizado de google. <a href="https://cse.google.com/" target="_blank">https://cse.google.com/</a>.<br><strong>Recuerda que debes una poseer una cuenta de gmail para acceder a estas opciones</strong>.</p>
+														
+
+							<hr>
+							<input type="submit" name="submit" value="Guardar Configuración" class="btn btn-default">
 						</div>
 					</form>
 				</div>
