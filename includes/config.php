@@ -20,6 +20,6 @@ $jwversion = 6;
 $player = 'primary: "html5",';
 $skin = 'skin: "jwplayer6/mlp/mlp.xml",';
 $jwplayer_key = "";
-$apigoogle = "AIzaSyBKRHHdsULhcbHSZ8sy1g4coKmXfxBw8Jk";
-$Search_engine_ID = "008976088354159204485:odgcyxt6t9y";
+$apigoogle = "";
+$Search_engine_ID = "";
 ?>
